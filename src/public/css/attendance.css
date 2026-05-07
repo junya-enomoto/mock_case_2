@@ -1,0 +1,48 @@
+body {
+    background-color: #f5f5f5;
+}
+
+.attendance__container {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.status-label {
+    background: #ddd;
+    padding: 4px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.attendance__date {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 20px 0 10px;
+}
+
+.attendance__time {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.btn-punch {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 15px 100px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-punch:hover {
+    opacity: 0.8;
+}
+
+.btn-punch-inverted {
+    background-color: #fff;
+    color: #000;
+}
