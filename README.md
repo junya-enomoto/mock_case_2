@@ -23,7 +23,75 @@
 - **スタッフ一覧**: 全一般ユーザーのリストを表示し、各スタッフの勤怠詳細へ遷移可能。
 - **スタッフ別勤怠一覧**: 特定のスタッフの月ごとの勤怠履歴を表示し、月移動が可能。
 - **申請一覧**: 全ユーザーからの修正申請を一覧で表示（承認待ち、承認済みでフィルタリング可能）。
-- **修正申請承認**: ユーザーからの修正申請の内容を確認し、承認・却下（今回は承認のみ実装）を実行。
+- **修正申請承認**: ユーザーからの修正申請の内容を確認し、承認を実行。
+
+## データベース設計ER図
+mermaid
+
+erDiagram
+    USERS ||--o{ ATTENDANCES : registers
+    USERS ||--o{ CORRECTION : "has_requests"
+
+    ATTENDANCES ||--o{ RESTS : has
+    ATTENDANCES ||--o{ CORRECTION : corrects
+
+    CORRECTION ||--o{ CORRECTION_RESTS : details
+
+    RESTS }o--o| CORRECTION_RESTS : original_rest
+
+    USERS {
+        int id PK
+        varchar name
+        varchar email
+        datetime email_verified_at
+        varchar password
+        datetime created_at
+        datetime updated_at
+    }
+    ADMINS {
+        int id PK
+        varchar name
+        varchar email
+        varchar password
+        datetime created_at
+        datetime updated_at
+    }
+    ATTENDANCES {
+        int id PK
+        int user_id FK
+        date work_date
+        time clock_in
+        time clock_out
+        datetime created_at
+        datetime updated_at
+    }
+    RESTS {
+        int id PK
+        int attendance_id FK
+        time start_time
+        time end_time
+        datetime created_at
+        datetime updated_at
+    }
+    CORRECTION {
+        int id PK
+        int attendance_id FK
+        time clock_in_new
+        time clock_out_new
+        text remarks
+        varchar status
+        datetime created_at
+        datetime updated_at
+    }
+    CORRECTION_RESTS {
+        int id PK
+        int correction_id FK
+        int original_rest_id FK
+        time start_time_new
+        time end_time_new
+        datetime created_at
+        datetime updated_at
+    }
 
 ## 使用技術
 
@@ -38,7 +106,7 @@
 
 1.  **リポジトリのクローン**
     ```bash
-    git clone [あなたのリポジトリURL]
+    git clone https://github.com/junya-enomoto/mock_case_2.git
     ```
 
 2.  **`.env` ファイルの設定**
@@ -104,7 +172,7 @@
 ## 動作確認
 
 ブラウザで以下のURLにアクセスしてください。
-- **アプリケーション**: `http://localhost`
+- **アプリケーション**: `http://localhost/login`
 - **MailHog (メール受信確認)**: `http://localhost:8025`
 
 ### ログイン情報（重要）
@@ -122,6 +190,15 @@
 - メールアドレス: `reina.n@coatctech.com`
 - パスワード: `password`
 - ログインURL: `http://localhost/login`
+
+## テストデータ生成ロジック
+- php artisan db:seed を実行することで、動作確認用のダミーデータを自動生成します。
+- AttendanceSeeder では、以下のルールに基づきリアルな勤怠状況を再現しています。
+- 対象期間と頻度各ユーザーに対し、本日より過去 30日間 のデータを生成します。毎日出勤とするのではなく、20%の確率で欠勤（データなし） を作り、リアルな出勤簿を再現しています。
+- 勤務時間と休憩基本の勤務時間は 09:00 〜 18:00 としています。
+- すべての勤務データに対し、12:00 〜 13:00 の休憩データを自動付随させています。
+- 修正申請データのシミュレート生成された勤怠データのうち 10%の確率 で、「承認待ち（pending）」状態の修正申請データを自動作成します。
+- 修正理由として「電車の遅延のため」などのテキストを挿入し、管理画面側での承認フローを即座にテストできる状態にします。
 
 ## テストの実行
 
