@@ -26,8 +26,7 @@
 - **修正申請承認**: ユーザーからの修正申請の内容を確認し、承認を実行。
 
 ## データベース設計ER図
-mermaid
-
+```mermaid
 erDiagram
     USERS ||--o{ ATTENDANCES : registers
     USERS ||--o{ CORRECTION : "has_requests"
@@ -92,6 +91,7 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
+```
 
 ## 使用技術
 
