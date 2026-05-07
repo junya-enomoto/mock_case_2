@@ -102,6 +102,14 @@ erDiagram
 - **認証**: Laravel Fortify
 - **メール**: MailHog (開発時のみ)
 
+## ディレクトリ構造
+
+本プロジェクトは、Docker環境とLaravel本体を以下の構造で管理しています。
+
+- **docker/**: Docker関連の設定ファイル（Dockerfile, nginx設定等）
+- **src/**: **Laravelアプリ本体（ソースコード、バリデーション、モデル等）**
+- **docker-compose.yml**: コンテナ構成定義
+
 ## 環境構築手順
 
 1.  **リポジトリのクローン**
