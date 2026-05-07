@@ -118,8 +118,9 @@ erDiagram
     ```
 
 2.  **`.env` ファイルの設定**
-    `.env.example` をコピーして `.env` ファイルを作成し、データベースやメール設定を記述します。
+    Laravel本体がある `src` ディレクトリに移動し、`.env.example` をコピーして `.env` ファイルを作成します。
     ```bash
+    cd src
     cp .env.example .env
     ```
     `.env` ファイルを開き、以下の設定を確認または追記します。
